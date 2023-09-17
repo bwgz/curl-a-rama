@@ -40,4 +40,10 @@ jobs:
           cd dist
           ln -s index.html 404.html
           ls -al
+          git init
+          git add -A
+          git commit -m 'deploy'
+          git push -f git@github.com:bwgz/curl-a-rama.git main:gh-pages
+          cd -
+
 
