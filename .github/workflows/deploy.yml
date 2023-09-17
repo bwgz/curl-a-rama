@@ -21,7 +21,7 @@ permissions:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # Build Vue distribution
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -37,15 +37,24 @@ jobs:
           npm ci
           echo run build
           npm run build
-          cd dist
-          ln -s index.html 404.html
-          ls -al
-          git config --global user.email "bruce@bwgz.ort"
-          git config --global user.name "Bruce Green"
-          git init
-          git add -A
-          git commit -m 'deploy'
-          git push -f git@github.com:bwgz/curl-a-rama.git main:gh-pages
-          cd -
+          touch /dist/.nojekyll
+          ls -al /dist
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: /dist
+
+          # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
 
