@@ -46,6 +46,21 @@ const now = ref(new Date().toISOString());
                 </p>
                 <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
             </div>
+            <div class="jumbotron bg-white">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <h1 class="display-3">Get Ready To Rock</h1>
+                            <p class="lead">
+                                A draw is a scoring shot, or any shot that is sent into scoring position without
+                                touching any other stones on the way. It is designed to stop inside of the house for a
+                                point.
+                            </p>
+                        </div>
+                        <div class="col-6"><img class="img-fluid" src="house.png" /></div>
+                    </div>
+                </div>
+            </div>
             <div class="jumbotron bg-trimble-blue-dark text-white">
                 <div class="container">
                     <div class="row">
