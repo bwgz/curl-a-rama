@@ -45,3 +45,16 @@ jobs:
         username: 'bwgz'
         reponame: 'curl-a-rama'
         token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+
+          # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
