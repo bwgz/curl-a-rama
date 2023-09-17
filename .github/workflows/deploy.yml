@@ -46,7 +46,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: Build-Vue
-      uses: bwgz/VuePagesAction
+      uses: xRealNeon/VuePagesAction@1.0.1
       with:
         username: 'bwgz'
         reponame: 'curl-a-rama'
