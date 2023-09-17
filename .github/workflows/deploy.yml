@@ -40,6 +40,8 @@ jobs:
           cd dist
           ln -s index.html 404.html
           ls -al
+          git config --global user.email "bruce@bwgz.ort"
+          git config --global user.name "Bruce Green"
           git init
           git add -A
           git commit -m 'deploy'
