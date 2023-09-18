@@ -19,13 +19,13 @@ import Layout from "../components/Layout.vue";
                         </router-link>
                     </div>
                     <div class="col-4">
-                        <img class="img-fluid" src="../assets/house.png" /></div>
+                        <img class="img-fluid" src="../assets/near-view.png" /></div>
                 </div>
             </div>
             <div class="jumbotron bg-white">
                 <div class="row">
                     <div class="col-4">
-                        <img class="img-fluid" src="../assets/house.png" />
+                        <img class="img-fluid" src="../assets/side-view.png" />
                     </div>
                     <div class="col-8">
                         <h1 class="display-3">Get Ready To Rock</h1>

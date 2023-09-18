@@ -3,7 +3,7 @@ import * as THREE from "three";
 const setupCameras = (origin, center, iceDimensions, converter) => {
     const cameras = [];
 
-    const shooterCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, converter(100));
+    const shooterCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, converter(100));
     const nearCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, converter(100));
     const sideCamera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, converter(100));
     const farCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, converter(100));
