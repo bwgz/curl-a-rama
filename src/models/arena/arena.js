@@ -4,7 +4,7 @@ class ArenaModel {
     static generate(manager) {
         return new Promise((resolve, reject) => {
             const mtlLoader = new ColladaLoader(manager);
-            mtlLoader.setPath("/models/arena/");
+            mtlLoader.setPath("/curl-a-rama/models/arena/");
 
             mtlLoader.load("model.dae", (result) => {
                 try {
