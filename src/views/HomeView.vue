@@ -18,13 +18,14 @@ import Layout from "../components/Layout.vue";
                             <a class="btn btn-primary btn-lg" href="#" role="button">Enter the Arena</a>
                         </router-link>
                     </div>
-                    <div class="col-4"><img class="img-fluid" src="house.png" /></div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="../assets/house.png" /></div>
                 </div>
             </div>
             <div class="jumbotron bg-white">
                 <div class="row">
                     <div class="col-4">
-                        <img class="img-fluid" src="house.png" />
+                        <img class="img-fluid" src="../assets/house.png" />
                     </div>
                     <div class="col-8">
                         <h1 class="display-3">Get Ready To Rock</h1>
