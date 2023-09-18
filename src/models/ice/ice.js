@@ -88,7 +88,7 @@ const generateEnd = (dimensions, image) => {
     var texture = new THREE.CanvasTexture(canvas);
     texture.needsUpdate = true;
 
-    const bumpMap = new THREE.TextureLoader().load("/samples-3d/curling/models/ice/ice-bump-02.png");
+    const bumpMap = new THREE.TextureLoader().load("/curl-a-rama/models/ice/ice-bump-02.png");
 
     var material = new THREE.MeshLambertMaterial({
         map: texture,
@@ -149,7 +149,7 @@ const generateHogToHog = (dimensions, image) => {
     var texture = new THREE.CanvasTexture(canvas);
     texture.needsUpdate = true;
 
-    const bumpMap = new THREE.TextureLoader().load("/samples-3d/curling/models/ice/ice-bump-02.png");
+    const bumpMap = new THREE.TextureLoader().load("/curl-a-rama/models/ice/ice-bump-02.png");
 
     var material = new THREE.MeshLambertMaterial({
         map: texture,
@@ -170,7 +170,7 @@ class IceModel {
     static generate(dimensions) {
         return new Promise((resolve) => {
             const image = new Image();
-            image.src = "/models/ice/ice-02.png";
+            image.src = "/curl-a-rama/models/ice/ice-02.png";
             image.onload = () => {
                 const near = generateEnd(dimensions, image);
                 const middle = generateHogToHog(dimensions, image);
