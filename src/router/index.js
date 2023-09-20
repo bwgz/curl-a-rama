@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ArenaView from '../views/ArenaView.vue'
+import OidcCallback from '../views/OidcCallback.vue'
+import { vuexOidcCreateRouterMiddleware } from '../pinia-oidc/index.js'
+
+import store from '@/store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,6 +14,11 @@ const router = createRouter({
       name: 'home',
       component: HomeView
     },
+    {
+      path: '/callback', // Needs to match redirectUri (redirect_uri if you use snake case) in you oidcSettings
+      name: 'oidcCallback',
+      component: OidcCallback
+    },  
     {
       path: '/arena',
       name: 'arena',
@@ -28,5 +37,7 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach(vuexOidcCreateRouterMiddleware(store, 'oidcStore'))
 
 export default router

@@ -1,3 +1,7 @@
+<script setup>
+import SignIn from '../components/SignIn.vue'
+</script>
+
 <template>
     <nav class="navbar navbar-expand-sm flex-nowrap modus-header">
         <a class="navbar-brand">
@@ -22,8 +26,8 @@
             >
         </div>
         <div class="ml-auto navbar-nav">
-            <a class="nav-link s-2 d-inline-flex" href="/login">
-                <button id="signin" type="button" class="btn btn-primary">Sign In</button>
+            <a class="nav-link s-2 d-inline-flex">
+                <SignIn />
             </a>
         </div>
     </nav>

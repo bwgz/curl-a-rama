@@ -1,10 +1,13 @@
 <script setup>
 import Layout from "../components/Layout.vue";
+
 </script>
 
 <template>
     <Layout>
         <template v-slot:default>
+            <SignedInUser />
+
             <div class="jumbotron">
                 <div class="row">
                     <div class="col-8">
