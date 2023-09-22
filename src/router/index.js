@@ -1,10 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ArenaView from '../views/ArenaView.vue'
-import OidcCallback from '../views/OidcCallback.vue'
-import { vuexOidcCreateRouterMiddleware } from '../pinia-oidc/index.js'
-
-import store from '@/store'
+import LoginCallbackView from '../views/LoginCallbackView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,8 +13,8 @@ const router = createRouter({
     },
     {
       path: '/callback', // Needs to match redirectUri (redirect_uri if you use snake case) in you oidcSettings
-      name: 'oidcCallback',
-      component: OidcCallback
+      name: 'loginCallback',
+      component: LoginCallbackView
     },  
     {
       path: '/arena',
@@ -38,6 +35,13 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(vuexOidcCreateRouterMiddleware(store, 'oidcStore'))
+//router.beforeEach(vuexOidcCreateRouterMiddleware(store, 'oidc'))
+
+
+router.beforeEach((to) => {
+  // ✅ This will work because the router starts its navigation after
+  // the router is installed and pinia will be installed too
+
+})
 
 export default router

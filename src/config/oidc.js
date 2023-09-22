@@ -4,6 +4,7 @@ export const oidcSettings = {
     clientSecret: "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",
     redirectUri: 'http://localhost:5173/curl-a-rama/callback', // client_id if you use typescript, see note below
     responseType: 'code',
-    scope: 'openid email profile'
+    scope: 'openid email profile',
+    postLogoutRedirectUri: 'http://localhost:5173/curl-a-rama',
   }
   

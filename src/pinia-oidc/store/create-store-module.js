@@ -14,6 +14,7 @@ import { openUrlWithIframe } from "../services/navigation";
 export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
     const oidcConfig = getOidcConfig(oidcSettings);
     const oidcUserManager = createOidcUserManager(oidcSettings);
+
     storeSettings = objectAssign([
         {
             namespaced: false,
@@ -48,7 +49,7 @@ export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
         });
     }
 
-    const state = {
+    const state = () => ({
         access_token: null,
         id_token: null,
         refresh_token: null,
@@ -58,15 +59,9 @@ export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
         is_checked: false,
         events_are_bound: false,
         error: null,
-    };
+    });
 
-    const isAuthenticated = (state) => {
-        if (state[storeSettings.isAuthenticatedBy]) {
-            return true;
-        }
-
-        return false;
-    };
+    const isAuthenticated = (state) => state.id_token !== null;
 
     const authenticateOidcSilent = (context, payload = {}) => {
         // Take options for signinSilent from 1) payload or 2) storeSettings if defined there
@@ -198,7 +193,7 @@ export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
                             resolve(null);
                         });
                 });
-                const isAuthenticatedInStore = isAuthenticated(context.state);
+                const isAuthenticatedInStore = isAuthenticated(this);
                 getUserPromise.then((user) => {
                     if (!user || user.expired) {
                         const authenticateSilently = oidcConfig.silent_redirect_uri && oidcConfig.automaticSilentSignin;
@@ -350,7 +345,7 @@ export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
                     throw err;
                 });
         },
-        getOidcUser(context) {
+        getOidcUser() {
             /* istanbul ignore next */
             return oidcUserManager.getUser().then((user) => {
                 this.setOidcUser(user);
@@ -474,9 +469,6 @@ export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
         },
     };
 
-    /* istanbul ignore next */
-    const mutations = {};
-
     const errorPayload = (context, error) => {
         return {
             context,
@@ -493,20 +485,6 @@ export default (oidcSettings, storeSettings = {}, oidcEventListeners = {}) => {
             dispatchCustomBrowserEvent(eventName, payload);
         }
     };
-
-    const storeModule = objectAssign([
-        storeSettings,
-        {
-            state,
-            getters,
-            actions,
-            mutations,
-        },
-    ]);
-
-    if (typeof storeModule.dispatchEventsOnWindow !== "undefined") {
-        delete storeModule.dispatchEventsOnWindow;
-    }
 
     const xxx = {
         state,

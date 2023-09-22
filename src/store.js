@@ -1,9 +1,7 @@
-import { vuexOidcCreateStoreModule } from "./pinia-oidc";
-
-import { oidcSettings } from "./config/oidc";
-
 import { defineStore } from "pinia";
-
+import { vuexOidcCreateStoreModule } from "./pinia-oidc";
+import { createUserStore } from "./pinia-oidc/store/userstore";
+import { oidcSettings } from "./config/oidc";
 
 const xxx =     vuexOidcCreateStoreModule(
     oidcSettings,
@@ -31,7 +29,8 @@ const xxx =     vuexOidcCreateStoreModule(
     }
   );
 
-export const useOidc = defineStore("oidc", { state: () => xxx.state, getters: xxx.getters, actions: xxx.actions});
-
+export const useOidc = defineStore("oidc", { state: xxx.state, getters: xxx.getters, actions: xxx.actions});
 
 export default useOidc;
+
+export const useUser = createUserStore(oidcSettings);

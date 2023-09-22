@@ -6,15 +6,15 @@
   
 <script>
 import { mapActions } from 'pinia'
-import useOidc from '../store'
+import { useUser } from '../store'
 
 export default {
-    name: 'OidcCallback',
+    name: 'LoginCallback',
     methods: {
-    ...mapActions(useOidc, ['oidcSignInCallback'])
+    ...mapActions(useUser, ['completeLogin'])
     },
     mounted() {
-        this.oidcSignInCallback(location.href)
+        this.completeLogin(location.href)
             .then((redirectPath) => {
                 this.$router.push(redirectPath)
             })
