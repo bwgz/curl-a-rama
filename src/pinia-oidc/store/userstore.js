@@ -29,6 +29,7 @@ export const createUserStore = (settings) => {
             async completeLogin(url) {
                 const user = await userManager.signinRedirectCallback(url);
                 this.profile = user.profile;
+                this.isLoading = false;
                 localStorage.setItem("user", JSON.stringify(this.$state));
                 return "/";
             },
