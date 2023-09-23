@@ -25,6 +25,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: github-pages
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -35,15 +36,13 @@ jobs:
         env:
           VITE_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
-          pwd
           echo create env file
           touch .env
           echo VITE_CLIENT_SECRET=${VITE_CLIENT_SECRET} >> .env
-          echo VITE_REDIRECT_URI=https://bwgz.github.io/curl-a-rama/callback >> .env
           echo run ci,
           npm ci
-          echo run build
-          npm run build
+          echo run github-pages
+          npm run github-pages
           touch dist/.nojekyll
           cp 404.html dist/404.html
           ls -al dist
