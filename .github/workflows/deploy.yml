@@ -35,7 +35,7 @@ jobs:
         env:
           VITE_LARRY: ${{ secrets.LARRY }}
           VITE_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          VITE_BRUCE_GREEN: ${{ env.BRUCE_GREEN }}
+          VITE_BRUCE_GREEN: ${{ vars.BRUCE_GREEN }}
         run: |
           pwd
           echo $SHELL
