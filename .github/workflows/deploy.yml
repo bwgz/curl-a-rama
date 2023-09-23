@@ -1,5 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
+# This is a workflow to deploy to github pages
 name: Curl-A-Rama CI/CD
 
 # Controls when the workflow will run
@@ -29,22 +28,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Build Vue
         env:
-          VITE_LARRY: ${{ secrets.LARRY }}
           VITE_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          VITE_BRUCE_GREEN: ${{ vars.BRUCE_GREEN }}
         run: |
           pwd
           echo create env file
           touch .env
-          echo VITE_LARRY=${VITE_LARRY} >> .env
-          echo VITE_BRUCE_GREEN=${VITE_BRUCE_GREEN} >> .env
           echo VITE_CLIENT_SECRET=${VITE_CLIENT_SECRET} >> .env
           echo VITE_REDIRECT_URI=https://bwgz.github.io/curl-a-rama/callback >> .env
-          cat .env
           echo run ci,
           npm ci
           echo run build
