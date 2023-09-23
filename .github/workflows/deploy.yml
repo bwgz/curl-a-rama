@@ -30,12 +30,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
       - name: Build Vue
         run: |
           pwd
           echo VITE_CLIENT_SECRET={{ secrets.CLIENT_SECRET }} >> .env
           echo VITE_REDIRECT_URI=https://bwgz.github.io/curl-a-rama/callback >> .env
+          cat .env
           echo run ci,
           npm ci
           echo run build
