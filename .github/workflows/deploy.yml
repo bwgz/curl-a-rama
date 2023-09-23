@@ -25,7 +25,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    environment: github-pages
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -38,8 +38,6 @@ jobs:
           VITE_BRUCE_GREEN: ${{ vars.BRUCE_GREEN }}
         run: |
           pwd
-          echo $SHELL
-          env
           echo create env file
           touch .env
           echo VITE_LARRY=${VITE_LARRY} >> .env
