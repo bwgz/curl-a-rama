@@ -34,7 +34,8 @@ jobs:
       - name: Build Vue
         run: |
           pwd
-          echo VITE_CLIENT_SECRET={{secrets.CLIENT_SECRET}} > .env
+          echo VITE_CLIENT_SECRET={{secrets.CLIENT_SECRET}} >> .env
+          echo VITE_REDIRECT_URI=https://bwgz.github.io/curl-a-rama/callback >> .env
           echo run ci,
           npm ci
           echo run build
