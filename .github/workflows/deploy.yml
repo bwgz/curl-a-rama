@@ -33,6 +33,8 @@ jobs:
       - name: Build Vue
         run: |
           pwd
+          echo $SHELL
+          env
           echo create env file
           echo VITE_CLIENT_SECRET=$VITE_CLIENT_SECRET >> .env
           echo VITE_REDIRECT_URI=https://bwgz.github.io/curl-a-rama/callback >> .env
