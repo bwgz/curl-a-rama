@@ -1,6 +1,15 @@
+<script>
+export default {
+  name: 'AboutView',
+  mounted() {
+    this.$store.dispatch('setPageTitle', 'About');
+  },
+};
+</script>
 <template>
   <div class="about">
     <h1>This is an about page</h1>
+    
   </div>
 </template>
 
