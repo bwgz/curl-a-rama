@@ -34,7 +34,7 @@ jobs:
         run: |
           pwd
           echo create env file
-          echo VITE_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} >> .env
+          echo VITE_CLIENT_SECRET=$VITE_CLIENT_SECRET >> .env
           echo VITE_REDIRECT_URI=https://bwgz.github.io/curl-a-rama/callback >> .env
           cat .env
           echo run ci,
@@ -44,6 +44,9 @@ jobs:
           touch dist/.nojekyll
           cp 404.html dist/404.html
           ls -al dist
+        env:
+          VITE_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+    
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
