@@ -10,12 +10,6 @@ const NO_USER = {
 export const createUserStore = (settings) => {
     const userManager = new UserManager(settings);
 
-    const reset = (state) => {
-        state.profile = NO_USER.profile;
-        state.error = NO_USER.error;
-        state.isLoading = NO_USER.isLoading;
-    }
-
     const store = defineStore("user", {
         state: () => {
             if (localStorage.getItem("user")) return JSON.parse(localStorage.getItem("user"));
@@ -34,14 +28,9 @@ export const createUserStore = (settings) => {
                 return "/";
             },
             async logout() {
-                reset(this);
+                this.profile = null;
+                this.isLoading = false;
                 localStorage.removeItem("user");
-                //await userManager.signoutRedirect();
-            },
-            async completeLogout() {
-                reset(this);
-                localStorage.removeItem("user");
-                //await userManager.signoutRedirectCallback();
             },
             async getUser() {
                 this.isLoading = true;
