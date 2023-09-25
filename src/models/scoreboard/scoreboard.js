@@ -4,8 +4,6 @@ import { dumpGeometry } from "../../utils.js";
 const TOP = 0;
 const BOTTOM = 1;
 
-const colors = ["red", "yellow"];
-
 class ScoreboardModel {
     static getTextSize(context, text) {
         let metrics = context.measureText(text);
@@ -15,7 +13,7 @@ class ScoreboardModel {
         return new THREE.Vector2(width, hight);
     }
 
-    static generateTeams(width, height, teams, clocks) {
+    static generateTeams(width, height, teams, colors, clocks) {
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
@@ -36,8 +34,8 @@ class ScoreboardModel {
             context.font = "20px Verdana";
             let textSize = ScoreboardModel.getTextSize(context, clocks[t]);
             context.fillStyle = color;
-            context.fillText(clocks[t], clock.x + (w / 2) - (textSize.x / 2), clock.y + (h / 2) + (textSize.y / 2));
-    
+            context.fillText(clocks[t], clock.x + w / 2 - textSize.x / 2, clock.y + h / 2 + textSize.y / 2);
+
             x = origin.x;
             y = origin.y + (height / 2) * 0.4 * t;
             w = width;
@@ -47,7 +45,7 @@ class ScoreboardModel {
             context.font = "28px Verdana";
             textSize = ScoreboardModel.getTextSize(context, teams[t]);
             context.fillStyle = "white";
-            context.fillText(teams[t], team.x + (w / 2) - (textSize.x / 2), team.y + (h / 2) + (textSize.y / 2));
+            context.fillText(teams[t], team.x + w / 2 - textSize.x / 2, team.y + h / 2 + textSize.y / 2);
         }
 
         var texture = new THREE.CanvasTexture(canvas);
@@ -102,7 +100,20 @@ class ScoreboardModel {
         return positions;
     }
 
-    static generateScores(width, height, score) {
+    static getContrastColor(color) {
+        switch (color) {
+            case "red":
+            case "blue":
+                return "white";
+                break;
+            case "yellow":
+                return "black";
+            default:
+                return "black";
+                break;
+        }
+    }
+    static generateScores(width, height, colors, score) {
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
@@ -155,7 +166,7 @@ class ScoreboardModel {
                     context.fillStyle = "white";
                     context.strokeRect(position.x, position.y, position.width, position.height);
                 }
-                context.fillStyle = end < ends ? "white" : team === 0 ? "white" : "black";
+                context.fillStyle = end < ends ? "white" : ScoreboardModel.getContrastColor(color[team]);
                 context.fillText(
                     text,
                     position.x + (position.width - textSize.x) / 2,
@@ -178,8 +189,9 @@ class ScoreboardModel {
         return mesh;
     }
 
-    static generate(dimensions) {
-        const team = ["FIN", "USA"];
+    static generate(dimensions, teams) {
+        const team = [teams[0].name, teams[1].name];
+        const color = [teams[0].color, teams[1].color];
         const clock = ["28:10", "29:58"];
         const score = [];
 
@@ -194,7 +206,7 @@ class ScoreboardModel {
             let percentage = 0.25;
             let sectionWidth = width * percentage;
             x += sectionWidth / 2;
-            const teams = ScoreboardModel.generateTeams(sectionWidth, height, team, clock);
+            const teams = ScoreboardModel.generateTeams(sectionWidth, height, team, color, clock);
             position.set(x, y, 0);
             teams.position.set(position.x, position.y, position.z);
             x += sectionWidth / 2;
@@ -206,7 +218,7 @@ class ScoreboardModel {
             percentage = 0.75;
             sectionWidth = width * percentage;
             x += sectionWidth / 2;
-            const scores = ScoreboardModel.generateScores(width * percentage, height, score);
+            const scores = ScoreboardModel.generateScores(width * percentage, height, color, score);
             position.set(x, y, 0);
             scores.position.set(position.x, position.y, position.z);
 

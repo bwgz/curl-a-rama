@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRaw } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import {
@@ -22,11 +22,18 @@ import { Animation } from "../models/animation.js";
 import { ThirdPersonCamera } from "../models/third-person-camera.js";
 import { dumpGeometry } from "../utils";
 
-const RED = 0;
-const YELLOW = 1;
+const props = defineProps(["teams"]);
+const { teams } = toRaw(props);
+
+const loading = ref(0);
+const loaded = ref(0);
+const progressBar = ref();
+const progressBarLoaded = ref();
+
+const TEAM_0 = 0;
+const TEAM_1 = 1;
 
 const canvasElement = ref();
-const progressBar = ref();
 const cameraBar = ref();
 
 const converter = meterToCentimeter;
@@ -45,7 +52,7 @@ let stones = [[], []];
 let cameras = null;
 let mixer;
 
-let activeCamera = 0
+let activeCamera = 0;
 function setCamera(index) {
     activeCamera = index;
 }
@@ -59,7 +66,6 @@ const shot = {
 const clock = new THREE.Clock();
 
 function render() {
-
     if (mixer) {
         const delta = clock.getDelta();
         mixer.update(delta);
@@ -76,12 +82,21 @@ function animate() {
     render();
 }
 
-
 onMounted(() => {
     const manager = new THREE.LoadingManager();
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
+        loaded.value = itemsLoaded;
+        loading.value = itemsTotal;
         console.log("Started loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
     };
+
+    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+        loaded.value = itemsLoaded;
+        loading.value = itemsTotal;
+        progressBarLoaded.value.style.width = `${(itemsLoaded / itemsTotal) * 100}%`;
+        console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
+    };
+
     manager.onLoad = function () {
         const canvas = canvasElement.value;
         console.log("canvas", canvas);
@@ -140,7 +155,7 @@ onMounted(() => {
         scene.add(floor);
         scene.add(ice);
 
-        stones[RED].forEach((stone, index) => {
+        stones[TEAM_0].forEach((stone, index) => {
             stone.position.x = origin.x + iceDimensions.width / 2 - stoneDimensions.diameter / 2;
             stone.position.y =
                 center.y - iceDimensions.length / 2 + stoneDimensions.diameter * index + stoneDimensions.diameter / 2;
@@ -148,7 +163,7 @@ onMounted(() => {
             scene.add(stone);
         });
 
-        stones[YELLOW].forEach((stone, index) => {
+        stones[TEAM_1].forEach((stone, index) => {
             stone.position.x = origin.x - iceDimensions.width / 2 + stoneDimensions.diameter / 2;
             stone.position.y =
                 center.y - iceDimensions.length / 2 + stoneDimensions.diameter * index + stoneDimensions.diameter / 2;
@@ -158,43 +173,49 @@ onMounted(() => {
 
         shot.stones = stones;
 
-        shot.stones[RED][0].position.x = origin.x - iceDimensions.width / 2 + stoneDimensions.diameter / 2;
-        shot.stones[RED][0].position.y = origin.y + iceDimensions.length - stoneDimensions.diameter / 2;
+        shot.stones[TEAM_0][0].position.x = origin.x - iceDimensions.width / 2 + stoneDimensions.diameter / 2;
+        shot.stones[TEAM_0][0].position.y = origin.y + iceDimensions.length - stoneDimensions.diameter / 2;
 
-        shot.stones[RED][1].position.x = origin.x + stoneDimensions.diameter / 2;
-        shot.stones[RED][1].position.y = origin.y + iceDimensions.hogLine + iceDimensions.hogToHog + meterToCentimeter(2);
+        shot.stones[TEAM_0][1].position.x = origin.x + stoneDimensions.diameter / 2;
+        shot.stones[TEAM_0][1].position.y =
+            origin.y + iceDimensions.hogLine + iceDimensions.hogToHog + meterToCentimeter(2);
 
-        shot.stones[RED][2].position.x = origin.x + meterToCentimeter(1);
-        shot.stones[RED][2].position.y = origin.y + iceDimensions.hogLine + iceDimensions.hogToHog + meterToCentimeter(3);
+        shot.stones[TEAM_0][2].position.x = origin.x + meterToCentimeter(1);
+        shot.stones[TEAM_0][2].position.y =
+            origin.y + iceDimensions.hogLine + iceDimensions.hogToHog + meterToCentimeter(3);
 
-        shot.stones[RED][3].position.x = origin.x + meterToCentimeter(1.2);
-        shot.stones[RED][3].position.y =
+        shot.stones[TEAM_0][3].position.x = origin.x + meterToCentimeter(1.2);
+        shot.stones[TEAM_0][3].position.y =
             origin.y + iceDimensions.hogLine + iceDimensions.hogToHog + meterToCentimeter(6.25);
 
-        shot.stones[YELLOW][0].position.x = origin.x - stoneDimensions.diameter * 0.75;
-        shot.stones[YELLOW][0].position.y =
-            origin.y + iceDimensions.hogLine + iceDimensions.hogToHog + meterToCentimeter(2) + stoneDimensions.diameter / 2;
+        shot.stones[TEAM_1][0].position.x = origin.x - stoneDimensions.diameter * 0.75;
+        shot.stones[TEAM_1][0].position.y =
+            origin.y +
+            iceDimensions.hogLine +
+            iceDimensions.hogToHog +
+            meterToCentimeter(2) +
+            stoneDimensions.diameter / 2;
 
-        shot.stones[YELLOW][1].position.x = origin.x - stoneDimensions.diameter / 2;
-        shot.stones[YELLOW][1].position.y =
+        shot.stones[TEAM_1][1].position.x = origin.x - stoneDimensions.diameter / 2;
+        shot.stones[TEAM_1][1].position.y =
             origin.y +
             iceDimensions.hogLine +
             iceDimensions.hogToHog +
             iceDimensions.hogLine -
             (iceDimensions.teeLine + iceDimensions.twelveFootRadius);
 
-        shot.stones[YELLOW][2].position.x = origin.x - stoneDimensions.diameter * 1.5;
-        shot.stones[YELLOW][2].position.y =
+        shot.stones[TEAM_1][2].position.x = origin.x - stoneDimensions.diameter * 1.5;
+        shot.stones[TEAM_1][2].position.y =
             origin.y +
             iceDimensions.hogLine +
             iceDimensions.hogToHog +
             iceDimensions.hogLine -
             (iceDimensions.teeLine - iceDimensions.fourFootRadius);
 
-        shot.stones[YELLOW][3].position.x = origin.x + iceDimensions.width / 2 - stoneDimensions.diameter / 2;
-        shot.stones[YELLOW][3].position.y = origin.y + iceDimensions.length - stoneDimensions.diameter / 2;
+        shot.stones[TEAM_1][3].position.x = origin.x + iceDimensions.width / 2 - stoneDimensions.diameter / 2;
+        shot.stones[TEAM_1][3].position.y = origin.y + iceDimensions.length - stoneDimensions.diameter / 2;
 
-        shot.shooter = shot.stones[RED][4];
+        shot.shooter = shot.stones[TEAM_0][4];
 
         thirdPersonCamera = new ThirdPersonCamera({
             camera: cameras[0],
@@ -203,7 +224,6 @@ onMounted(() => {
         });
 
         thirdPersonCamera.Update(0);
-
 
         const finish = new THREE.Vector3(0, 3800, 0);
         const clip = Animation.generate(origin, iceDimensions, finish);
@@ -214,10 +234,6 @@ onMounted(() => {
         animate();
         progressBar.value.style.display = "none";
         cameraBar.value.style.display = "block";
-    };
-
-    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
     };
 
     manager.itemStart("arena");
@@ -240,33 +256,37 @@ onMounted(() => {
     });
 
     manager.itemStart("scoreboard");
-    ScoreboardModel.generate(scoreboardDimensions).then((model) => {
+    ScoreboardModel.generate(scoreboardDimensions, teams).then((model) => {
         scoreboard = model;
         manager.itemEnd("scoreboard");
     });
 
-    manager.itemStart("red stones");
-    StoneSet.generate(stoneDimensions, "red").then((models) => {
-        stones[RED] = models;
+    manager.itemStart("team 0 stones");
+    StoneSet.generate(stoneDimensions, teams[TEAM_0].color).then((models) => {
+        stones[TEAM_0] = models;
 
         manager.itemEnd("red stones");
     });
 
-    manager.itemStart("yellow stones");
-    StoneSet.generate(stoneDimensions, "yellow").then((models) => {
-        stones[YELLOW] = models;
+    manager.itemStart("team 1 stones");
+    StoneSet.generate(stoneDimensions, teams[TEAM_1].color).then((models) => {
+        stones[TEAM_1] = models;
 
         manager.itemEnd("yellow stones");
     });
-
 });
 </script>
 
 <template>
-    <div ref="progressBar" class="progress-bar-container">
-        <label class="display-2" for="progress-bar">Get Ready to Rock</label>
-        <div class="spinner-border text-primary" role="status">
-            <span id="progress-bar" class="sr-only">Loading...</span>
+    <div ref="progressBar">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <label class="display-2 p-20" for="progress-bar">Get Ready to Rock</label>
+            <div id="progress-bar" class="progress" aria-busy="true" style="width: 400px">
+                <div ref="progressBarLoaded" class="progress-bar" role="progressbar"></div>
+            </div>
+            <div class="text-left text-dark">
+                <strong>Completed {{ loaded }} of {{ loading }}.</strong>
+            </div>
         </div>
     </div>
     <div ref="cameraBar" style="display: none">
@@ -289,17 +309,6 @@ button {
 
 canvas {
     pointer-events: all;
-}
-
-.progress-bar-container {
-    left: 50%;
-    top: 50%;
-    width: 100%;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 #c {
