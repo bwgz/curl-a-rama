@@ -1,24 +1,23 @@
-<script>
-export default {
-  name: 'AboutView',
-  mounted() {
-    this.$store.dispatch('setPageTitle', 'About');
-  },
-};
-</script>
-<template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    
-  </div>
-</template>
+<script setup>
+import Layout from "../components/Layout.vue";
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
+</script>
+
+<template>
+  <Layout>
+      <template v-slot:default>
+          <div class="jumbotron">
+              <div class="row">
+                  <div class="col-8">
+                      <h1 class="display-3">About Curl-A-Rama</h1>
+                      <p class="lead">
+                          Curl-A-Rama is a world class event center, curling arena and home to championship curling.
+                      </p>
+                  </div>
+                  <div class="col-4">
+                      <img class="img-fluid" src="../assets/near-view.png" /></div>
+              </div>
+          </div>
+      </template>
+  </Layout>
+</template>
