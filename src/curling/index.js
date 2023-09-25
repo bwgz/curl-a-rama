@@ -1,3 +1,3 @@
-import { createCurlingStore } from "./curlingStore.js";
+import { createCurlingStore } from "./curlingstore.js";
 
 export { createCurlingStore };
