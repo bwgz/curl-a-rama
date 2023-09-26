@@ -1,26 +1,40 @@
 <template>
     <div v-if="isAuthenticated">
-        <button type="button" class="btn btn-lg btn-icon-only btn-text-dark ml-2 p-2" data-toggle="tooltip"
-         data-placement="bottom" title="Applications">
-        <svg width="32" height="32" fill="currentColor">
-          <use xlink:href="/modus-solid-icons.svg#apps" /></svg>
-      </button>
+        <div class="collapse navbar-collapse">
+            <div class="navbar-nav ml-auto">
+                <router-link :to="{ name: 'settings' }">
+                    <button
+                        type="button"
+                        class="btn btn-lg btn-icon-only border-white ml-2 border-0 unstyled-button"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Notifications"
+                    >
+                        <i class="modus-icons left-icon" aria-hidden="true">settings</i>
+                    </button>
+                </router-link>
+                <div class="dropdown">
+                    <button
+                        class="btn btn-lg btn-icon-only rounded-circle border-white ml-2 border-0 p-2 unstyled-button"
+                        type="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <img
+                            :src="profile.picture"
+                            class="rounded-circle"
+                            width="32"
+                            height="32"
+                            alt="Avatar"
+                            loading="lazy"
+                        />
+                    </button>
 
-        <div class="dropdown">
-            <button
-                class="btn btn-md btn-icon-only p-0 unstyled-button"
-                type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-            >
-                <img :src="profile.picture" class="rounded-circle" height="30" alt="Avatar" loading="lazy" />
-            </button>
-
-            <div class="dropdown-menu dropdown-menu-right">
-                <router-link :to="{ name: 'settings' }" class="dropdown-item"> Settings </router-link>
-                <hr class="dropdown-divider" />
-                <a @click="dologout()" class="dropdown-item" href="#">Sign Out</a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a @click="dologout()" class="dropdown-item" href="#">Sign Out</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
