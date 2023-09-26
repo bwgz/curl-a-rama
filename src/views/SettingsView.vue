@@ -5,6 +5,8 @@ import { storeToRefs } from "pinia";
 import Layout from "../components/Layout.vue";
 
 const error = ref(null);
+const saved = ref(false);
+
 const store = useCurling();
 const { teams } = storeToRefs(store);
 const { update } = store;
@@ -16,6 +18,10 @@ const submit = () => {
     }
     error.value = null;
     update({ teams: teams.value });
+    saved.value = true;
+    setTimeout(() => {
+        saved.value = false;
+    }, 5000);
 };
 </script>
 
@@ -25,10 +31,17 @@ const submit = () => {
             <div class="container p-2 pb-5">
                 <h1>Settings</h1>
                 <form @submit.prevent="submit">
+                    <div v-if="saved" class="toast toast-success show" role="alert" aria-live="assertive" aria-atomic="true">
+                        Settings saved successfully.
+                        <button  @click="saved = false" type="button" class="close" data-dismiss="toast">
+                            <i class="modus-icon modus-icons" aria-hidden="true">close</i>
+                        </button>
+                    </div>
+
                     <h2>Teams</h2>
                     <div v-if="error" class="alert alert-danger fade show" role="alert">
                         <i class="modus-icons mr-1" aria-hidden="true">warning</i>
-                        <div>{{error}}</div>
+                        <div>{{ error }}</div>
                         <button type="button" class="close" data-dismiss="alert">
                             <i class="modus-icons notranslate" aria-hidden="true">close</i>
                         </button>
