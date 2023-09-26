@@ -240,6 +240,28 @@ onMounted(() => {
     ArenaModel.generate(manager).then((model) => {
         arena = model;
         dumpGeometry("arena", arena);
+
+        const canvas = document.createElement("canvas");
+        canvas.width = 100;
+        canvas.height = 100;
+        const context = canvas.getContext("2d");
+
+        const replacement = new THREE.MeshBasicMaterial({
+            color: 0x0000ff,
+            name: "scoreboard",
+        });
+
+        arena.traverse((obj) => {
+            if (obj.material && Array.isArray(obj.material)) {
+                for (var n = 0; n < obj.material.length; ++n) {
+                    if (obj.material[n].name === "scoreboard") {
+                        console.log(obj);
+                        //obj.material[n] = replacement;
+                    }
+                }
+            }
+        });
+
         manager.itemEnd("arena");
     });
 
