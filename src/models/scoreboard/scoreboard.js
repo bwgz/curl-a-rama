@@ -166,7 +166,7 @@ class ScoreboardModel {
                     context.fillStyle = "white";
                     context.strokeRect(position.x, position.y, position.width, position.height);
                 }
-                context.fillStyle = end < ends ? "white" : ScoreboardModel.getContrastColor(color[team]);
+                context.fillStyle = end < ends ? "white" : ScoreboardModel.getContrastColor(color);
                 context.fillText(
                     text,
                     position.x + (position.width - textSize.x) / 2,
