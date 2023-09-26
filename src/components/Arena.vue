@@ -27,14 +27,13 @@ const { teams } = toRaw(props);
 
 const loading = ref(0);
 const loaded = ref(0);
-const progressBar = ref();
 const progressBarLoaded = ref();
+const canvasElement = ref();
+const activeCamera = ref(0);
+const goLive = ref(false);
 
 const TEAM_0 = 0;
 const TEAM_1 = 1;
-
-const canvasElement = ref();
-const cameraBar = ref();
 
 const converter = meterToCentimeter;
 const floorDimensions = FloorDimensions.generate(converter);
@@ -52,9 +51,8 @@ let stones = [[], []];
 let cameras = null;
 let mixer;
 
-let activeCamera = 0;
 function setCamera(index) {
-    activeCamera = index;
+    activeCamera.value = index;
 }
 
 let thirdPersonCamera = null;
@@ -74,7 +72,7 @@ function render() {
         cameras[0].updateProjectionMatrix();
     }
 
-    renderer.render(scene, cameras[activeCamera]);
+    renderer.render(scene, cameras[activeCamera.value]);
 }
 
 function animate() {
@@ -232,8 +230,7 @@ onMounted(() => {
         clipAction.play();
 
         animate();
-        progressBar.value.style.display = "none";
-        cameraBar.value.style.display = "block";
+        goLive.value = true;
     };
 
     manager.itemStart("arena");
@@ -300,7 +297,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="progressBar">
+    <div v-if="!goLive">
         <div class="d-flex flex-column align-items-center justify-content-center">
             <label class="display-2 p-20" for="progress-bar">Get Ready to Rock</label>
             <div id="progress-bar" class="progress" aria-busy="true" style="width: 400px">
@@ -311,31 +308,95 @@ onMounted(() => {
             </div>
         </div>
     </div>
-    <div ref="cameraBar" style="display: none">
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(0)">Rock Cam</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(1)">Near End</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(2)">Side</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(3)">Far End</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(4)">Skip Cam</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(5)">Ice Level</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(6)">Scoreboard</button>
-        <button type="button" class="btn btn-sm btn-primary" @click="setCamera(7)">Nose Bleed</button>
+
+    <div v-if="goLive">
+        <div class="card" style="width: 100%">
+            <div class="card-body">
+                <h5 class="card-header">Camera</h5>
+                <div class="btn-group pt-2">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        :class="{ active: activeCamera === 0 }"
+                        @click="setCamera(0)"
+                    >
+                        Rock Cam
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        :class="{ active: activeCamera === 1 }"
+                        @click="setCamera(1)"
+                    >
+                        Near End
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        :class="{ active: activeCamera === 2 }"
+                        @click="setCamera(2)"
+                    >
+                        Side
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary "
+                        :class="{ active: activeCamera === 3 }"
+                        @click="setCamera(3)"
+                    >
+                        Far End
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary "
+                        :class="{ active: activeCamera === 4 }"
+                        @click="setCamera(4)"
+                    >
+                        Skip Cam
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        :class="{ active: activeCamera === 5 }"
+                        @click="setCamera(5)"
+                    >
+                        Ice Level
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary "
+                        :class="{ active: activeCamera === 6 }"
+                        @click="setCamera(6)"
+                    >
+                        Scoreboard
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary "
+                        :class="{ active: activeCamera === 7 }"
+                        @click="setCamera(7)"
+                    >
+                        Nose Bleed
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <canvas ref="canvasElement" />
 </template>
 
 <style scoped>
-button {
-    margin: 10px;
-}
-
-canvas {
-    pointer-events: all;
-}
-
 #c {
     width: 100%;
     height: 100%;
     display: block;
+}
+
+.btn-group {
+    width: 100%;
+}
+
+.btn-group .btn {
+    width: 50%;
 }
 </style>
